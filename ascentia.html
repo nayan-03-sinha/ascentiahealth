@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascentia - Your AI Mental Health Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #87CEEB;
+            --primary-green: #98D8C8;
+            --soft-mint: #B5EAD7;
+            --soft-lavender: #E6E6FA;
+            --soft-peach: #FFE5CC;
+            --text-dark: #2C3E50;
+            --text-light: #5A6C7D;
+            --white: #FFFFFF;
+            --background: #F7FAFB;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 2rem 80px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.1) 0%, rgba(152, 216, 200, 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--soft-mint) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            right: -100px;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--soft-lavender) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -50px;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(20px) rotate(240deg); }
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(135, 206, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            position: relative;
+            animation: fadeIn 1s ease-out 0.6s backwards;
+        }
+
+        .hero-image-placeholder {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, var(--soft-mint), var(--soft-lavender));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .hero-image-placeholder::before {
+            content: '🧠';
+            font-size: 100px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 2rem;
+            background: white;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 20px;
+            background: var(--background);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 2rem;
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.05) 0%, rgba(152, 216, 200, 0.05) 100%);
+        }
+
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
+            z-index: 1;
+        }
+
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .step p {
+            color: var(--text-light);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 2rem;
+            background: white;
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            padding: 2rem;
+            background: var(--background);
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .quote-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--soft-mint), var(--soft-lavender));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .author-info h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 2rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,138.7C672,128,768,128,864,138.7C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .cta p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .cta .btn {
+            background: white;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            padding: 1.2rem 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .cta .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: var(--text-dark);
+            color: white;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        .footer-divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-green));
+            margin: 2rem auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-image {
+                display: none;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+
+            .cta p {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-on-scroll {
+            animation: slideIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Ascentia 🌱</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Your Mental Health Journey Starts Here</h1>
+                <p>Meet Health, your AI-powered companion that understands, supports, and guides you through life's ups and downs with empathy and care.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary" onclick="alert('Get Started feature coming soon!')">Get Started Free</a>
+                    <a href="#" class="btn btn-secondary" onclick="showDemo()">Try the Demo</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-image-placeholder"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2>Features That Care</h2>
+                <p>Designed with your mental wellness in mind, every feature helps you build healthier habits and emotional resilience.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">😊</div>
+                    <h3>Mood Detector</h3>
+                    <p>Our AI understands your emotional state through natural conversation, helping you identify patterns and triggers in your daily life.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Daily Check-ins</h3>
+                    <p>Quick, personalized check-ins that adapt to your schedule. Track your progress and celebrate small wins every day.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privacy First</h3>
+                    <p>Your thoughts are sacred. End-to-end encryption ensures your conversations stay completely private and secure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>24/7 Support</h3>
+                    <p>Never feel alone. Health is always here to listen, without judgment, whenever you need someone to talk to.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Personalized Insights</h3>
+                    <p>Receive tailored recommendations and coping strategies based on your unique experiences and needs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌈</div>
+                    <h3>Progress Tracking</h3>
+                    <p>Visualize your mental health journey with beautiful, encouraging charts that highlight your growth over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="section-header">
+            <h2>Your Journey to Better Mental Health</h2>
+            <p>Getting started with Health is simple and takes just a few minutes.</p>
+        </div>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Sign Up</h3>
+                <p>Create your free account in seconds. No credit card required, just your commitment to feeling better.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Personalize</h3>
+                <p>Tell Health about yourself through a friendly chat. The more it knows, the better it can support you.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Start Talking</h3>
+                <p>Open up at your own pace. Health listens without judgment and responds with empathy and understanding.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Grow Stronger</h3>
+                <p>Track your progress, learn coping strategies, and build resilience with continuous AI-powered support.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials">
+        <div class="section-header">
+            <h2>Real Stories, Real Impact</h2>
+            <p>Hear from young people who've transformed their mental health journey with Health.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <span class="quote-icon">"</span>
+                <p class="testimonial-text">Health helped me recognize my anxiety patterns and gave me tools to manage them. It's like having a therapist in my pocket, available whenever I need support.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👤</div>
+                    <div class="author-info">
+                        <h4>Sarah M.</h4>
+                        <p>College Student, 21</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <span class="quote-icon">"</span>
+                <p class="testimonial-text">I was skeptical at first, but Health's daily check-ins have become a part of my routine. It's helped me build better habits and actually look forward to self-reflection.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👤</div>
+                    <div class="author-info">
+                        <h4>Alex K.</h4>
+                        <p>High School Senior, 18</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <span class="quote-icon">"</span>
+                <p class="testimonial-text">The privacy aspect was crucial for me. I can be completely honest without worrying about judgment. Health has become my safe space to process emotions.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👤</div>
+                    <div class="author-info">
+                        <h4>Jordan T.</h4>
+                        <p>Graduate Student, 24</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta">
+        <div class="cta-content">
+            <h2>Start Your Mental Wellness Journey Today</h2>
+            <p>Join thousands of young people who are taking control of their mental health with Health's AI-powered support.</p>
+            <a href="#" class="btn" onclick="alert('Contact form coming soon! Email us at hello@ascentia.ai')">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Support</a>
+                <a href="#">Blog</a>
+                <a href="#">Resources</a>
+            </div>
+            <div class="footer-divider"></div>
+            <p>&copy; 2024 Health. Made with 💚 for your mental wellness.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll behavior for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenu?.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.background = 'white';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.padding = '2rem';
+            navLinks.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+        });
+
+        // Demo function
+        function showDemo() {
+            alert('Demo chat interface coming soon! This will let you experience Health\'s AI companion firsthand.');
+        }
+
+        // Navbar scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                nav.style.padding = '0.5rem 2rem';
+            } else {
+                nav.style.padding = '1rem 2rem';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-on-scroll');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards and testimonial cards
+        document.querySelectorAll('.feature-card, .testimonial-card, .step').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
